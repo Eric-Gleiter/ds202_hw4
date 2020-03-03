@@ -1,0 +1,7 @@
+---
+title: "Homework "
+author: "Eric Gleiter; Git hub: Eric-Gleiter"
+date: "2/19/2020"
+output: html_document
+---
+*Note: All package checks and installations code is hidden on the html* 
