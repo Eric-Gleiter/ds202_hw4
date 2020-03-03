@@ -83,8 +83,12 @@ The relationship between medain weight and diet is clear after 21 days chicks on
 **Question 5)**
 ```{r}
 ggplot(day21 , aes(x=Chick, y=weightgain)) + geom_bar(stat="identity") + ylab("Weight Gain on Day 21") + labs(title = "Weight Gain on day 21 for each Chick")
-maxChick <- day21 %>% filter(weightgain == max(weightgain))
-minChick <- day21 %>% filter(weightgain == min(weightgain))
+maxChick <- day21 %>%
+  group_by(Diet) %>%
+  filter(weightgain == max(weightgain, na.rm = TRUE))
+minChick <- day21 %>% 
+  group_by(Diet) %>%
+  filter(weightgain == min(weightgain, na.rm = TRUE))
 
 head(maxChick)
 head(minChick)
@@ -100,17 +104,35 @@ maxChick_day0 <- day0 %>% filter(weight == max(weight))
 
 head(minChick_day0, 7) #using this gives us the chicks with the correct starting weights 
 head(maxChick_day0)
-min_max_Chick_list <- c(18,27,28,29,33,36,48,3,11,19,23)
+min_Chick_list <- c(27,28,29,33,36,48)
+max_Chick_list <- c(3,11,19,23)
 
-Max_Min_Chicks <- ChickWeight %>% filter(Chick %in% min_max_Chick_list)
+Min_Chicks <- complete %>% filter(Chick %in% min_Chick_list)
+Max_Chicks <- complete %>% filter(Chick %in% max_Chick_list)
 
-ggplot(Max_Min_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line()
+ggplot(Min_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line() + labs(title = "Min Starting Weight Chick growth trajectory") + ylab("Weight")
+
+ggplot(Max_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line() + labs(title = "Max Starting Weight Chick growth trajectory") + ylab("Weight")
 ```
+
+See question 7 for analysis of the graphs
+
+
 
 **Question 7)**
 ```{r}
+average_weight <- complete %>%
+  group_by(Time) %>%
+  mutate(average = mean(weight, na.rm = TRUE)) %>%
+  filter(Chick == 1) #since the average is done by time taking only one chick allows us to take only one copy of average weight
 
+ggplot() + geom_line(data = Min_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line(data= average_weight, aes(x=Time, y=average, color="Average")) + labs(title = "Min Starting Weight Chick growth trajectory") + ylab("Weight")
+
+ggplot() + geom_line(data = Max_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line(data= average_weight, aes(x=Time, y=average, color="Average")) + labs(title = "Max Starting Weight Chick growth trajectory") + ylab("Weight")
 ```
+
+The difference between the growth trajectories of the two groups is pretty suprising. The heavier starting weight chicks seem to grow slower than average and overall slower than their lighter counterparts. Additionally the heavier chicks had a lower maximum weight at the end than the lighter chicks did. this suggests that it is more benfical to start out smaller so that you can grow faster. 
+
 
 
 **Question 8)**
