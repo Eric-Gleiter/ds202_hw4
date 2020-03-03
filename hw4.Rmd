@@ -76,6 +76,7 @@ day21 <- complete %>%
 
 ggplot(data=day21, aes(x= reorder(Diet,weightgain,FUN=median),y=weightgain)) + geom_boxplot() + xlab("Diet") + ylab("Weight Gain on Day 21") + labs(title = "Weight Gain vs Diet for day 21") + ylim(0,350)
 ```
+
 The relationship between medain weight and diet is clear after 21 days chicks on diet 3 are the heaviest followed by deit 4 which are in turn follwed by chicks on diet 2 and the lightest chicks are those on diet 1. It is interesting to note that while diet 4 does not have a higher median weight than diet 3 is it less spread out and may be considered superior depending on the application.
 
 
@@ -94,7 +95,16 @@ As the graph shows (Which is order by deit and increasing order) Chick 24 on die
 
 **Question 6)**
 ```{r}
+minChick_day0 <- day0 %>% filter(weight == min(weight))
+maxChick_day0 <- day0 %>% filter(weight == max(weight))
 
+head(minChick_day0, 7) #using this gives us the chicks with the correct starting weights 
+head(maxChick_day0)
+min_max_Chick_list <- c(18,27,28,29,33,36,48,3,11,19,23)
+
+Max_Min_Chicks <- ChickWeight %>% filter(Chick %in% min_max_Chick_list)
+
+ggplot(Max_Min_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line()
 ```
 
 
