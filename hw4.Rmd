@@ -77,7 +77,7 @@ day21 <- complete %>%
 ggplot(data=day21, aes(x= reorder(Diet,weightgain,FUN=median),y=weightgain)) + geom_boxplot() + xlab("Diet") + ylab("Weight Gain on Day 21") + labs(title = "Weight Gain vs Diet for day 21") + ylim(0,350)
 ```
 
-The relationship between medain weight and diet is clear after 21 days chicks on diet 3 are the heaviest followed by deit 4 which are in turn follwed by chicks on diet 2 and the lightest chicks are those on diet 1. It is interesting to note that while diet 4 does not have a higher median weight than diet 3 is it less spread out and may be considered superior depending on the application.
+The relationship between median weight and diet is clear after 21 days chicks on diet 3 are the heaviest followed by diet 4 which are in turn followed by chicks on diet 2 and the lightest chicks are those on diet 1. It is interesting to note that while diet 4 does not have a higher median weight than diet 3 is it less spread out and may be considered superior depending on the application.
 
 
 **Question 5)**
@@ -94,7 +94,7 @@ head(maxChick)
 head(minChick)
 ```
 
-As the graph shows (Which is order by deit and increasing order) Chick 24 on diet 2 has the least weight gain with only a gain of 32 while chick 35 on diet 3 had the largest weightgain with a gain of 332. these Results are supported by the maxChick and minChick dataframe with show the max and min weightgain for each diet.
+As the graph shows (Which is order by diet and increasing order) Chick 24 on diet 2 has the least weight gain with only a gain of 32 while chick 35 on diet 3 had the largest weight gain with a gain of 332. these Results are supported by the maxChick and minChick data frame with show the max and min weight gain for each diet.
 
 
 **Question 6)**
@@ -131,12 +131,40 @@ ggplot() + geom_line(data = Min_Chicks, aes(x=Time, y=weight,color=Chick)) + geo
 ggplot() + geom_line(data = Max_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line(data= average_weight, aes(x=Time, y=average, color="Average")) + labs(title = "Max Starting Weight Chick growth trajectory") + ylab("Weight")
 ```
 
-The difference between the growth trajectories of the two groups is pretty suprising. The heavier starting weight chicks seem to grow slower than average and overall slower than their lighter counterparts. Additionally the heavier chicks had a lower maximum weight at the end than the lighter chicks did. this suggests that it is more benfical to start out smaller so that you can grow faster. 
+The difference between the growth trajectories of the two groups is pretty surprising. The heavier starting weight chicks seem to grow slower than average and overall slower than their lighter counterparts. Additionally the heavier chicks had a lower maximum weight at the end than the lighter chicks did. this suggests that it is more beneficial to start out smaller so that you can grow faster. 
 
 
 
 **Question 8)**
+Which diet had the fastest growth rate (IE the most rapid growth trajectory)
 ```{r}
+diet1_growth <- complete %>%
+  filter(Diet ==1)%>%
+  group_by(Time)%>%
+  mutate(average_weight = mean(weight,na.rm = TRUE))
 
+diet2_growth <- complete %>%
+  filter(Diet ==2)%>%
+  group_by(Time)%>%
+  mutate(average_weight = mean(weight,na.rm = TRUE))
+
+diet3_growth <- complete %>%
+  filter(Diet ==3)%>%
+  group_by(Time)%>%
+  mutate(average_weight = mean(weight,na.rm = TRUE))
+
+diet4_growth <- complete %>%
+  filter(Diet ==4)%>%
+  group_by(Time)%>%
+  mutate(average_weight = mean(weight,na.rm = TRUE))
+
+ggplot() + geom_line(data = diet1_growth, aes(x=Time,y=average_weight,color="Diet 1")) + 
+  geom_line(data = diet2_growth, aes(x=Time,y=average_weight,color="Diet 2")) + 
+  geom_line(data = diet3_growth, aes(x=Time,y=average_weight,color="Diet 3")) + 
+  geom_line(data = diet4_growth, aes(x=Time,y=average_weight,color="Diet 4")) + 
+  labs(title = "Growth Trajectories for the different diets") +
+  ylab("Weight")
 ```
+
+It is very interesting to note that while diet three had the heaviest chicks at the end of the experiment, it was diet 4 who was growing the fastest until around day 14. This could inspire future experiments were the chicks are fed diet 4 until day 14 then switched to diet three and see if that increases the overall weight of the chicks further. Also it it nice to note that while the final weights of the chicks are different it appears that most of the chicks grew at a fairly similar rate. 
 
