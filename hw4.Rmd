@@ -5,3 +5,97 @@ date: "2/19/2020"
 output: html_document
 ---
 *Note: All package checks and installations code is hidden on the html* 
+
+```{r echo=FALSE, results='hide', message=FALSE}
+if (!require("ggplot2")) {
+install.packages("ggplot2")
+}
+
+if (!require("dplyr")) {
+install.packages("dplyr")
+}
+
+library(ggplot2)
+library(dplyr)
+library(datasets)
+
+
+```
+
+
+**Question 1)**
+```{r}
+day0 <- ChickWeight %>% filter(Time == 0)
+weight0 <- day0 %>%
+  group_by(Diet) %>%
+  summarize( n= n(),
+            average_weight = mean(weight, na.rm = TRUE),
+            sd_weight = sd(weight,  na.rm = TRUE)
+)
+
+weight0
+```
+
+
+
+**Question 2)**
+```{r}
+check_complete <- ChickWeight %>%
+  group_by(Chick) %>%
+  tally() %>%
+  filter(n!=12)
+
+#gives that chicks, 18, 16, 15, 8, and 44 do not have complete weight data
+
+complete <- ChickWeight %>%
+  filter(Chick != 18 &
+           Chick != 16 &
+           Chick != 15 &
+           Chick != 8 &
+           Chick != 44)
+
+head(complete,3)
+```
+
+
+**Question 3)**
+```{r}
+complete <- complete %>%
+  group_by(Chick) %>%
+  mutate(start_weight = first(weight, order_by = Chick)) %>%
+  mutate(weightgain = weight - start_weight)
+
+head(complete,3)
+```
+
+
+**Question 4)**
+```{r}
+day21 <- complete %>%
+  filter(Time==21)
+
+ggplot(data=day21, aes(x= reorder(Diet,weightgain,FUN=median),y=weightgain)) + geom_boxplot() + xlab("Diet") + ylab("Weight Gain on Day 21") + labs(title = "Weight Gain vs Diet for day 21") + ylim(0,350)
+```
+The relationship between medain weight and diet is clear after 21 days chicks on diet 3 are the heaviest followed by deit 4 which are in turn follwed by chicks on diet 2 and the lightest chicks are those on diet 1. It is interesting to note that while diet 4 does not have a higher median weight than diet 3 is it less spread out and may be considered superior depending on the application.
+
+
+**Question 5)**
+```{r}
+ggplot(day21 , aes(x=Chick, y=weightgain)) + geom_bar(stat="identity") + ylab("Weight Gain on Day 21") + labs(title = "Weight Gain on day 21 for each Chick")
+maxChick <- day21 %>% filter(weightgain == max(weightgain))
+minChick <- day21 %>% filter(weightgain == min(weightgain))
+
+head(maxChick)
+head(minChick)
+```
+
+As the graph shows (Which is order by deit and increasing order) Chick 24 on diet 2 has the least weight gain with only a gain of 32 while chick 35 on diet 3 had the largest weightgain with a gain of 332. these Results are supported by the maxChick and minChick dataframe with show the max and min weightgain for each diet.
+
+
+**Question 6)**
+```{r}
+
+```
+
+
+
