@@ -107,5 +107,14 @@ Max_Min_Chicks <- ChickWeight %>% filter(Chick %in% min_max_Chick_list)
 ggplot(Max_Min_Chicks, aes(x=Time, y=weight,color=Chick)) + geom_line()
 ```
 
+**Question 7)**
+```{r}
 
+```
+
+
+**Question 8)**
+```{r}
+
+```
 
